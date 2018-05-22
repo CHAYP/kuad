@@ -1,7 +1,7 @@
-from student import Student
-from loader import *
-from faculty import Faculty
-from function2 import Rule
+from lib.student import Student
+from lib.loader import *
+from lib.faculty import Faculty
+from lib.function2 import Rule
 
 def is_match(student, faculty, rule):
     result = []

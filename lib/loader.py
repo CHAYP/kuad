@@ -1,6 +1,7 @@
 import csv
-from student import Student
-from faculty import Faculty
+from lib.student import Student
+from lib.faculty import Faculty
+#care above
 
 def load_file(file_name, column_to_str):
     data = []

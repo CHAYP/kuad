@@ -1,4 +1,7 @@
-from loader import load_file, load_student, load_faculty, load_applicant
+from loader import load_file
+from loader import load_student 
+from loader import load_faculty
+from loader import load_applicant
 # Run this file as main to test load data
 # ==== EDIT FOR TEST LOADER ONLY ====
 _gatpat_list = ["id","prefix","first_name","last_name","year","gat_1","gat_2","gat","pat1","pat2","pat3","pat4","pat5","pat6","pat7_1","pat7_2","pat7_3","pat7_4","pat7_5","pat7_6","pat7_7"]
