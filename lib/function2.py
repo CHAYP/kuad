@@ -88,7 +88,7 @@ class Rule:
         return True
 
     def GREATER_THAN(self, std, fac, subj, val):
-        score = std.getMaxBySubject(subj)
+        score = std.get_max_score_by_subject(subj)
         if not score: return False
         return score[0] >= val
 
@@ -99,7 +99,7 @@ class Rule:
         return False
 
     def GREATER_THAN_MEAN(self, std, fac, subj, val):
-        score = std.getBySubject(subj)
+        score = std.get_score_by_subject(subj)
         if not score: return False
         for s in score:
             if s[0] >= self.mean[s[1]][subj] + val:
@@ -118,7 +118,7 @@ class Rule:
         sum_score = 0
         for subj in subj_list:
             if self.is_used(fac, subj) == False: continue
-            score = std.getMaxBySubject(subj)
+            score = std.get_max_score_by_subject(subj)
             if not score: return False
             sum_score += score[0]
         return sum_score >= val
@@ -127,7 +127,7 @@ class Rule:
         sum_diff = 0
         for subj in subj_list:
             if self.is_used(fac, subj) == False: continue            
-            subj_score = std.getBySubject(subj)
+            subj_score = std.get_score_by_subject(subj)
             if not subj_score: return False
             subj_diff = -1000000
             for score in subj_score:

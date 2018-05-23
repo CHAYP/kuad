@@ -20,7 +20,7 @@ def is_match(student, faculty, rule):
     #     pat1 = [i for i in result if i[1] == "pat1"]
     #     gat[0][0] = pat1[0][0] = gat[0][0] or pat1[0][0]
     # fuck code
-    # [print(i) for i in result]
+    [print(i) for i in result]
     return len(result) == sum([i[0] for i in result])
 
 def check_gender(student, faculty):
@@ -41,6 +41,8 @@ def cal_gatpat(student, faculty):
     pat7_list = [("pat7_1",300),("pat7_2",300),("pat7_3",300),("pat7_4",300),("pat7_5",300),("pat7_6",300),("pat7_7",300)]
     gatpat = cal_any(student, faculty, gatpat_list)
     pat7 = student.getMaxPat7()
+    # get max of pat7 sometimes wrong with faculty
+    if faculty.id == "107": pat7 = student.get_max_score_by_subject("pat7_1")
     if not pat7: pat7 = [0]
     if is_used(faculty, "pat7"): return gatpat + pat7[0]
     return gatpat
@@ -60,7 +62,7 @@ def cal_any(student, faculty, subject_list):
     for subj, cap in subject_list:
         if faculty.data[subj] == "-": continue
         if faculty.data[subj] == "": continue
-        score = student.getMaxBySubject(subj)
+        score = student.get_max_score_by_subject(subj)
         if not score: return -1
         sum_score += score[0]
         max_score += cap
@@ -72,7 +74,7 @@ def cal_any(student, faculty, subject_list):
 def cal_with_ratio(student, faculty, subject_list):
     sum_score = 0
     for subj, cap, ratio in subject_list:
-        score = student.getMaxBySubject(subj)
+        score = student.get_max_score_by_subject(subj)
         if not score: return -1
         sum_score += (score[0]/cap)*ratio
     return sum_score
@@ -129,6 +131,19 @@ def all_match(stds, facs, rule):
     result.sort()
     [print("{},{},{:.6f}".format(*i)) for i in result]
 
+def xxx(stds, facs, rule):
+    result = []
+
+    for std in stds.values():
+        for i in std.chooses:
+            fac = facs[i]
+            if is_match(std, fac, rule):
+                score = cal_score(std, fac)
+                result.append((fac.id, std.id, score))
+
+    result.sort()
+    [print("{},{},{:.6f}".format(*i)) for i in result]
+
 def std_to_all_facs(std, facs, rule):
     for fac in facs.values():
         is_match(std, fac, rule)
@@ -139,20 +154,29 @@ def fac_to_all_stds(stds, fac, rule):
             print(std.id, cal_score(std, fac))
 
 if __name__ == "__main__":
+    # เลขประจำตัวประชาชน,คำนำหน้า,ขื่อ,นามสกุล,year,gat_1,gat_2,gat,pat1,pat2,pat3,pat4,pat5,pat6,pat7_1,pat7_2,pat7_3,pat7_4,pat7_5,pat7_6,pat7_7
+    # เลขประจำตัวประชาชน,คำนำหน้า,ขื่อ,นามสกุล,year,x01,x02,x03,x04,x05
+    # เลขประจำตัวประชาชน,คำนำหน้า,ขื่อ,นามสกุล,year,u09,u19,u29,u39,u49,u59,u69,u89,u99
+    
     gatpat_list = ["id","prefix","first_name","last_name","year","gat_1","gat_2","gat","pat1","pat2","pat3","pat4","pat5","pat6","pat7_1","pat7_2","pat7_3","pat7_4","pat7_5","pat7_6","pat7_7"]
     udat_list = ["id","prefix","first_name","last_name","year","u09","u19","u29","u39","u49","u59","u69","u89","u99"]
     onet_list = ["id","prefix","first_name","last_name","year","x01","x02","x03","x04","x05"]
-    appl_list = ["id","prefix","gpa","x","plan"]
+    appl_list = ["id","prefix","gpa","x0","x1","x2","x3","n","n_1","n_2","n_3","n_4"]
 
-    gatpat_file_name = "tcas3-testdata/gatpat-small.csv"
-    udat_file_name = "tcas3-testdata/udat-small.csv"
-    onet_file_name = "tcas3-testdata/o-net-small.csv"
-    appl_file_name = "tcas3-testdata/applicants-small.csv"
+    gatpat_file_name = "real-data/gatpat.csv"
+    udat_file_name = "real-data/udat.csv"
+    onet_file_name = "real-data/o-net.csv"
+    appl_file_name = "real-data/anno-applicants-fixed-format2.csv"
 
-    # _gatpat_file_name = "tcas3-testdata/gatpat.csv"
-    # _udat_file_name = "tcas3-testdata/udat.csv"
-    # _onet_file_name = "tcas3-testdata/o-net.csv"
-    # _appl_file_name = "tcas3-testdata/applicants.csv"
+    # gatpat_file_name = "tcas3-testdata/gatpat-small.csv"
+    # udat_file_name = "tcas3-testdata/udat-small.csv"
+    # onet_file_name = "tcas3-testdata/o-net-small.csv"
+    # appl_file_name = "tcas3-testdata/applicants-small.csv"
+
+    # gatpat_file_name = "tcas3-testdata/gatpat.csv"
+    # udat_file_name = "tcas3-testdata/udat.csv"
+    # onet_file_name = "tcas3-testdata/o-net.csv"
+    # appl_file_name = "tcas3-testdata/applicants.csv"
 
     gatpat_score_list = gatpat_list[5:]
     udat_score_list = udat_list[5:]
@@ -188,10 +212,12 @@ if __name__ == "__main__":
 
     # print(len(facs.keys()),len(stds.keys()))
     
-    # a_test(stds["1234567890151"], facs["52"], rule) # ... bug
+    a_test(stds["6137670011895"], facs["105"], rule) # ... bug
     # a_test(stds["1234567890344"], facs["183"], rule) # ... bug
     # a_test(stds["1234567890344"], facs["19"], rule) # ... bug
     # std_to_all_facs(stds["1234567890149"], facs, rule)
     # fac_to_all_stds(stds, facs["52"], rule)
-    all_match(stds, facs, rule)
+    # all_match(stds, facs, rule)
+
+    # xxx(stds, facs, rule)
     

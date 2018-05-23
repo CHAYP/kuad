@@ -11,25 +11,24 @@ class Student:
         self.plan = ""
         self.gpa = -1
         
+        self.chooses = []
         self.score = {}
         self.data = {}
 
         self.min_year = "2560"
         # minimun year
 
-    def loadDataByYear(self, year_str, data):
+    def load_data_with_year(self, year_str, data):
         for key in data:
             if year_str not in self.data: self.data[year_str] = {}
             self.data[year_str][key] = data[key]
 
-    def getMaxBySubject(self, subject):
-        tmp = self.getBySubject(subject)
+    def get_max_score_by_subject(self, subject):
+        tmp = self.get_score_by_subject(subject)
         if not tmp: return []
-        tmp.sort(key=lambda x: -x[0])
-        return tmp[0]
-        # return max(tmp)
+        return max(tmp)
     
-    def getBySubject(self, subject):
+    def get_score_by_subject(self, subject):
         # tmp = [(self.data[year][subject], year) for year in self.data if self.data[year].get(subject,-1) != -1 and year >= self.min_year]
         tmp = [(self.data[year][subject], year) for year in self.data if self.data[year].get(subject,-1) != -1]
         return tmp
@@ -38,10 +37,10 @@ class Student:
         pat7_list = ["pat7_1","pat7_2","pat7_3","pat7_4","pat7_5","pat7_6","pat7_7"]
         score = []
         for subj in pat7_list:
-            tmp = self.getMaxBySubject(subj)
+            tmp = self.get_max_score_by_subject(subj)
             if tmp: score.append(tmp)
         if not score: return []
         return max(score)
 
-    def getScore(self, year, subject):
+    def get_score(self, year, subject):
         return self.data[year][subject], year

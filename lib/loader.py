@@ -1,4 +1,5 @@
 import csv
+import re
 from lib.student import Student
 from lib.faculty import Faculty
 #care above
@@ -26,6 +27,11 @@ def _val_to_float(val):
     if val == "-": return -1
     return float(val)
 
+def _correct_gpa(val):
+    if re.match(r"^[0-4](.\d+)*$",val):
+        return float(val)
+    return -1
+
 def load_student(data, score_list, students):
     for score in data:
         if score["id"] not in students:
@@ -36,14 +42,18 @@ def load_student(data, score_list, students):
                 score["last_name"]
             )
         score_data = _filter_with_key(score_list, score, _val_to_float)
-        students[score["id"]].loadDataByYear(score["year"],score_data)
+        students[score["id"]].load_data_with_year(score["year"],score_data)
 
 def load_applicant(data, students):
     for appl in data:
         if appl["id"] in students:
             students[appl["id"]].prefix = appl["prefix"]
-            students[appl["id"]].plan = appl["plan"]
-            students[appl["id"]].gpa = _val_to_float(appl["gpa"])
+            students[appl["id"]].gpa = _correct_gpa(appl["gpa"])
+
+            for i in ["n_1","n_2","n_3","n_4"]:
+                if appl[i] != "":
+                    students[appl["id"]].chooses.append(appl[i])
+
 
 def load_faculty(data, score_list, faculties):
     for major in data:
