@@ -1,14 +1,14 @@
-#KU Admission
-
+KU Admission
+===
 ##Class Desciption
-
+---
 - Faculty
 - Student
 
 ##File Description
-
+--
 ###loader.py
-
+---
 > load_file(**file_name**, **column_to_str**)
 
 read **file_name**(csv type) to list with name as in **column_to_str** 
