@@ -2,3 +2,4 @@
 admission_data
 real-data
 tcas3-testdata
+**/__pycache__
