@@ -3,3 +3,5 @@ admission_data
 real-data
 tcas3-testdata
 **/__pycache__
+*.out
+output.txt
