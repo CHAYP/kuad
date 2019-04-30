@@ -1,7 +1,7 @@
 from lib.student import Student
 from lib.loader import *
 from lib.faculty import Faculty
-from lib.function2 import Rule
+from kuad18.function2 import Rule
 
 def is_match(student, faculty, rule):
     result = []
@@ -20,7 +20,7 @@ def is_match(student, faculty, rule):
     #     pat1 = [i for i in result if i[1] == "pat1"]
     #     gat[0][0] = pat1[0][0] = gat[0][0] or pat1[0][0]
     # fuck code
-    [print(i) for i in result]
+    # [print(i) for i in result]
     return len(result) == sum([i[0] for i in result])
 
 def check_gender(student, faculty):
@@ -43,6 +43,8 @@ def cal_gatpat(student, faculty):
     pat7 = student.getMaxPat7()
     # get max of pat7 sometimes wrong with faculty
     if faculty.id == "107": pat7 = student.get_max_score_by_subject("pat7_1")
+    if faculty.id == "108": pat7 = student.get_max_score_by_subject("pat7_2")
+    if faculty.id == "109": pat7 = student.get_max_score_by_subject("pat7_4")
     if not pat7: pat7 = [0]
     if is_used(faculty, "pat7"): return gatpat + pat7[0]
     return gatpat
@@ -163,27 +165,27 @@ if __name__ == "__main__":
     onet_list = ["id","prefix","first_name","last_name","year","x01","x02","x03","x04","x05"]
     appl_list = ["id","prefix","gpa","x0","x1","x2","x3","n","n_1","n_2","n_3","n_4"]
 
-    gatpat_file_name = "real-data/gatpat.csv"
-    udat_file_name = "real-data/udat.csv"
-    onet_file_name = "real-data/o-net.csv"
-    appl_file_name = "real-data/anno-applicants-fixed-format2.csv"
+    gatpat_file_name = "kuad18/real-data/gatpat.csv"
+    udat_file_name = "kuad18/real-data/udat.csv"
+    onet_file_name = "kuad18/real-data/o-net.csv"
+    appl_file_name = "kuad18/real-data/anno-applicants-fixed-format2.csv"
 
-    # gatpat_file_name = "tcas3-testdata/gatpat-small.csv"
-    # udat_file_name = "tcas3-testdata/udat-small.csv"
-    # onet_file_name = "tcas3-testdata/o-net-small.csv"
-    # appl_file_name = "tcas3-testdata/applicants-small.csv"
+    # gatpat_file_name = "kuad18/tcas3-testdata/gatpat-small.csv"
+    # udat_file_name = "kuad18/tcas3-testdata/udat-small.csv"
+    # onet_file_name = "kuad18/tcas3-testdata/o-net-small.csv"
+    # appl_file_name = "kuad18/tcas3-testdata/applicants-small.csv"
 
-    # gatpat_file_name = "tcas3-testdata/gatpat.csv"
-    # udat_file_name = "tcas3-testdata/udat.csv"
-    # onet_file_name = "tcas3-testdata/o-net.csv"
-    # appl_file_name = "tcas3-testdata/applicants.csv"
+    # gatpat_file_name = "kuad18/tcas3-testdata/gatpat.csv"
+    # udat_file_name = "kuad18/tcas3-testdata/udat.csv"
+    # onet_file_name = "kuad18/tcas3-testdata/o-net.csv"
+    # appl_file_name = "kuad18/tcas3-testdata/applicants.csv"
 
     gatpat_score_list = gatpat_list[5:]
     udat_score_list = udat_list[5:]
     onet_score_list = onet_list[5:]
 
     major_list = ["id","name","cap","gpa","plan","gat","pat1","pat2","pat3","pat4","pat5","pat7","gatpat","u09","u19","u29","u39","u49","u59","u69","udat","x03","x04","x05","onet"]
-    major_file_name = "final_major.csv"
+    major_file_name = "kuad18/final_major.csv"
     major_score_list = major_list[5:]
 
     stds = {}
@@ -207,17 +209,17 @@ if __name__ == "__main__":
     # facs["181"].gender = "นาย"
     # facs["182"].gender = "นาย"
 
-    mean_file = "mean.txt"
+    mean_file = "kuad18/mean.txt"
     rule = Rule(mean_file)
 
     # print(len(facs.keys()),len(stds.keys()))
     
-    a_test(stds["6137670011895"], facs["105"], rule) # ... bug
+    # a_test(stds["6137670011895"], facs["105"], rule) # ... bug
     # a_test(stds["1234567890344"], facs["183"], rule) # ... bug
     # a_test(stds["1234567890344"], facs["19"], rule) # ... bug
     # std_to_all_facs(stds["1234567890149"], facs, rule)
     # fac_to_all_stds(stds, facs["52"], rule)
     # all_match(stds, facs, rule)
 
-    # xxx(stds, facs, rule)
+    xxx(stds, facs, rule)
     
