@@ -1,6 +1,4 @@
-from lib.student import Student
 from lib.loader import *
-from lib.faculty import Faculty
 from kuad18.function2 import Rule
 
 def is_match(student, faculty, rule):
