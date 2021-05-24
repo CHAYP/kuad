@@ -67,10 +67,12 @@ def print_std(std):
 
 
 def get_std_val(std, key, sub_key):
+    if key not in std: return 0
     return float(std[key].get(sub_key, no_score))
 
 
 def get_max_of(std, key, sub_key):
+    if key not in std: return 0
     score = no_score
     for i in to_list(std[key]):
         score = max(score, float(i.get(sub_key, no_score)))
@@ -132,14 +134,21 @@ def get_score(std, subj):
             max_score = max(max_score, get_max_of(std, 'gatpat', s))
         return max_score/300
 
+    print('caution!!!', subj)
     if not score_map.get(subj):
         score_map[subj] = 0
     score_map[subj] += 1
-    return 1
+    return -1
+
+def filter_score(std, fac, req):
+    for subj in req:
+        # exclude additional_condition
+        if subj == 'additional_condition': continue
+
 
 
 def calculate_score(std, fac):
-    # print(std)
+    print(std)
     scale = 10000
     score_sum = 0
     sum_ratio = 0
@@ -147,12 +156,12 @@ def calculate_score(std, fac):
         subj = criteria[0]
         ratio = criteria[1]
         score = get_score(std, subj)
-        # print(subj, ratio, score, score*(ratio))
+        print(subj, ratio, score, score*(ratio))
         score_sum += score*(ratio)
         sum_ratio += (ratio)
-    # print(score_sum)
+    print(score_sum)
     score_sum = score_sum/sum_ratio*scale
-    # print(score_sum)
+    print(score_sum)
     return score_sum
 
 
@@ -164,6 +173,7 @@ def matching(stds, facs):
                 print('not found ', _id)
                 return False
 
+            # filter(std, fac[_id])
             score = calculate_score(std, facs[_id])
             if spacial_case.get(_id):
                 score = score if score > spacial_case[_id]*10000 else 0
@@ -188,13 +198,15 @@ if __name__ == '__main__':
     onet_key = ['x01', 'x02', 'x03', 'x04', 'x05']
     pat7_key = ['pat7_1', 'pat7_2', 'pat7_3',
                 'pat7_4', 'pat7_5', 'pat7_6', 'pat7_7']
+    udat_key = ['u09','u19','u29','u39','u49','u59','u69','u89','u99']
 
     students = {}  # student dict
     faculties = {}  # faculty dict
 
     no_score = 0
 
-    std_appl_path = 'data/002-export-student-2021-5-16-randomized.csv'
+    std_appl_path = 'data/002-export-student-update-02-2021-5-18-randomized.csv'
+    # std_appl_path = 'data/002-export-student-2021-5-16-randomized.csv'
     std_gatpat_path = 'data/scores-gatpat.csv'
     std_udat_path = 'data/scores-udat.csv'
     std_extra_path = 'data/scores-extra.csv'
@@ -214,6 +226,7 @@ if __name__ == '__main__':
 
     score_map = {}
 
+    # filter by sum score
     spacial_case = {
         '10020110501101E0C2700': 147/500,
         '10020110501102A0C2700': 140/500,
@@ -222,10 +235,22 @@ if __name__ == '__main__':
         '10020110501105A0C2700': 150/500,
         '10020110501105B0C2700': 120/500,
         '10020110501106A0C2700': 187/500,
-        '10020110501106B0C2700': 147/500
+        '10020110501106B0C2700': 147/500,
+    }
+    
+    filter_case = {
+        '10020104210601A0C2700': ['sum_udat_0,9', 220],
+        '10020430210401A0C2700': [['u29','u39','u59','u69'], 50],
+        '10020430300701A0C2700': ['sum_udat_2:5', 50],
+        '10020430302101A0C2700': ['sum_udat_2:5', 50],
+        '10020430301601A0C2700': ['sum_udat_2:5', 50],
+        '10020430220201A0C2700': ['sum_udat_2:4', 50],
+        '10020430300501A0C2700': ['sum_udat_2:5', 50],
+        '10020430302801A0C2700': ['sum_udat_2:5', 50],
+        '10020430303501A0C2700': ['sum_udat_2:5', 50]
     }
 
-    matching(students, faculties)
+    # matching(students, faculties)
 
     # for i, j in score_map.items():
     #     print(i, j)
@@ -234,8 +259,8 @@ if __name__ == '__main__':
     # calculate_score(students['9611128787759'],
     #                 faculties['10020107611101D0C2700'])
     # print(faculties['10020107611101D0C2700'])
-    # calculate_score(students['9611128787759'],
-    #                 faculties['10020110501106A0C2700'])
+    calculate_score(students['9999999999901'],
+                    faculties['10020104213301A0C2700'])
     # print(faculties['10020110501106A0C2700'])
 
-    write_file('chay-out.csv', students)
+    # write_file('chay-out.csv', students)
